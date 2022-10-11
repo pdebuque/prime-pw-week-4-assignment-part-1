@@ -9,7 +9,7 @@ function hello() {
   return 'Hello World!';
 }
 // Call the function to test
-console.log('Test - should say "Hello World!"', hello());
+console.log('Test 1: should say "Hello World!"', hello());
 
 
 // 2. Function to return a personalized hello, using the `name` argument.
@@ -55,11 +55,7 @@ console.log('isPositive - should say false', isPositive(-3));
 // 6. Function to return the _last_ item in an array. If the 
 //    array is empty, return `undefined`.
 function getLast(array) {
-  if (array.length === 0) {
-    return undefined;
-  } else {
-    return array[array.length - 1];
-  }
+  return array[array.length - 1];
 }
 
 const test1 = [];
@@ -71,25 +67,23 @@ console.log(`Test 4: should say 'undefined, 19, 'badger'': ${getLast(test1)}, ${
 // 7. Function to find a value in an array. Return true if the 
 //    value is found and false otherwise. Use a loop;
 //    DO NOT use Array.includes, Array.indexOf, or Array.find 
+
 function find(value, array) {
-  if (array.length === 0) {
-    return false
-  };
-  let count = 0;
+
+  // if (array.length === 0) { //this clause is unnecessary
+  //   return false
+  // };
+  // let count = 0; // using a count variable always feels clunky
   for (let el of array) {
     if (el === value) {
-      count++;
+      return true
     }
   }
-  if (count > 0) {
-    return true
-  } else {
-    return false
-  };
+  return false
 }
 
-
-console.log(`Test 5: should say 'false, true, false': ${find(10, test1)}, ${find(19, test2)}, ${find('tiger', test3)}`)
+console.log(`Test 5a: should say 'false, true, false': ${find(10, test1)}, ${find(19, test2)}, ${find('tiger', test3)}`)
+console.log(`Test 5b: should say 'false, false, true': ${find(null, test1)}, ${find(10, test2)}, ${find('squirrel', test3)}`)
 
 // ----------------------
 // Stretch Goals
@@ -97,27 +91,25 @@ console.log(`Test 5: should say 'false, true, false': ${find(10, test1)}, ${find
 // 8. Function to check if a letter is the first letter in a 
 //    string. Return true if it is, and false otherwise
 function isFirstLetter(letter, string) {
-  const stringArray = string.split('')
-  if (stringArray[0] === letter) {
-    return true;
-  } else {
-    return false;
-  }
+  // const stringArray = string.split('') // is this necessary?... no.
+  return (string[0].toLowerCase() === letter.toLowerCase()) ? true : false; //case insensitive
 }
-console.log('isFirstLetter - should say true', isFirstLetter('a', 'apple'));
+
+console.log('isFirstLetter - should say true', isFirstLetter('A', 'apple'));
 console.log('isFirstLetter - should say false', isFirstLetter('z', 'apple'));
 
 // 9. Function to return the sum of all numbers in an array
 function sumAll(array) {
   let sum = 0
   array.forEach(element => sum += element)
-  // TODO: loop to add items
   return sum;
 }
 
+
 console.log(`Test 6: should say 25: ${sumAll(test2)}`)
 
-// 10. Function to return a new array of all positive (greater than zero)
+
+// 10. Function to return a new array of all positive
 //     numbers contained in an input array. If there are no positive numbers
 //     return an empty array. Note: The input array should not change.
 
@@ -138,27 +130,32 @@ console.log("Test 7: should say [9,12,8,1]:", onlyPos(test4));
 //     CodeWars(https://www.codewars.com/). Then describe it 
 //     here in a comment, write the function, and test it!
 
-// Exactly Three (https://edabit.com/challenge/8vJaRDKxoGQ5JnCCz)
+// --- Exactly Three (https://edabit.com/challenge/8vJaRDKxoGQ5JnCCz) ---
+// Given a number n, determine whether n has exactly 3 divisors or not. (1<=n<=10^12)
 
-// Given a number n, determine whether n has exactly 3 divisors or not.
-
-// Every number >1 has two divisors already: itself and one. The only numbers that can possibly have *only one* other divisor are perfect squares.
+// Every number >1 has two divisors already: itself and one. The only numbers that have *only one* other divisor are perfect squares whose sqrt is prime
 // First test will be whether or not it has an integer square root.
 
 function isExactlyThree(number) {
   //Test 0: is number an integer number greater than 1?
-  if (number < 2 || number%1 || isNaN(number)) {
+  if (number < 2 || number % 1 || isNaN(number)) {
     return false;
   }
   //Test 1: integer square root?
   const sqrt = Math.sqrt(number);
   if (Math.floor(sqrt) === sqrt) {
     //If the squareroot is prime, then the number has no further divisors
+
+    //special case: specifically for 4 and 9, the loop below does not work.
+
+    if (number === 4 || number === 9) {
+      return true
+    }
     //Test 2: is the square root prime?
     for (let i = 2; i <= Math.sqrt(sqrt); i++) { //for all possible divisors between 2 and the squareroot of sqrt,
       if (sqrt % i === 0) { //if sqrt is divisible by that number, it is not prime, so
-        return false 
-      } //otherwise,
+        return false
+      } //if it got through the whole loop without returning false, it has no divisors, so
       return true;
     }
   } else {
@@ -166,4 +163,7 @@ function isExactlyThree(number) {
   }
 }
 
-console.log(`test: should say true`, isExactlyThree('bear'))
+console.log('test: should say true', isExactlyThree(9))
+console.log('test: should say true', isExactlyThree(169))
+console.log('test: should say false', isExactlyThree('bear'))
+console.log('test: should say false', isExactlyThree(100))
