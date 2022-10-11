@@ -147,7 +147,6 @@ function isExactlyThree(number) {
     //If the squareroot is prime, then the number has no further divisors
 
     //special case: specifically for 4 and 9, the loop below does not work.
-
     if (number === 4 || number === 9) {
       return true
     }
